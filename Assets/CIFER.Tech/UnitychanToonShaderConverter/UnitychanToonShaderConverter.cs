@@ -19,6 +19,34 @@ namespace CIFER.Tech.UnitychanToonShaderConverter
 
                 converterData.MtoonMaterials[i].shader = mtoon;
 
+                #region Rendering
+
+                if (converterData.UtsMaterials[i].HasProperty("_Tweak_transparency"))
+                {
+                    //2: transparent
+                    //TransClipping
+                    converterData.MtoonMaterials[i].SetFloat("_BlendMode", 2f);
+                }
+                else if (converterData.UtsMaterials[i].HasProperty("_Clipping_Level"))
+                {
+                    //1: cutout
+                    //Clipping
+                    converterData.MtoonMaterials[i].SetFloat("_BlendMode", 1f);
+                    converterData.MtoonMaterials[i].SetFloat("_Cutoff",
+                        converterData.UtsMaterials[i].GetFloat("_Clipping_Level") * -0.95f + 0.95f);
+                }
+                else
+                {
+                    //0: opaque
+                    //それ以外
+                    converterData.MtoonMaterials[i].SetFloat("_BlendMode", 0f);
+                }
+
+                converterData.MtoonMaterials[i]
+                    .SetFloat("_CullMode", converterData.UtsMaterials[i].GetFloat("_CullMode"));
+
+                #endregion
+
                 #region Color
 
                 converterData.MtoonMaterials[i]
