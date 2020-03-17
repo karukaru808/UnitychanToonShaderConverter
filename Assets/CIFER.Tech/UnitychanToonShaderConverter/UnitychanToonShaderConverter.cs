@@ -137,6 +137,7 @@ namespace CIFER.Tech.UnitychanToonShaderConverter
                     var rimLightPower = converterData.UtsMaterials[i].GetFloat("_RimLight_Power");
                     var rimLightInsideMask = converterData.UtsMaterials[i].GetFloat("_RimLight_InsideMask");
                     var rimLift = Mathf.Abs(Mathf.Log10(1 - rimLightInsideMask) * rimLightPower + 0.0001f);
+                    rimLift = rimLift < 1f ? rimLift : 1f;
                     converterData.MtoonMaterials[i].SetFloat("_RimLift", rimLift);
                 }
 
@@ -151,8 +152,10 @@ namespace CIFER.Tech.UnitychanToonShaderConverter
                     converterData.MtoonMaterials[i].SetTexture("_OutlineWidthTexture",
                         converterData.UtsMaterials[i].GetTexture("_Outline_Sampler"));
 
-                    converterData.MtoonMaterials[i].SetFloat("_OutlineWidth",
-                        Mathf.Abs(converterData.UtsMaterials[i].GetFloat("_Outline_Width")) / 10f);
+                    var outlineWidth = Mathf.Abs(converterData.UtsMaterials[i].GetFloat("_Outline_Width"))
+                        * 0.099f + 0.01f;
+                    outlineWidth = outlineWidth < 1f ? outlineWidth : 1f;
+                    converterData.MtoonMaterials[i].SetFloat("_OutlineWidth", outlineWidth);
 
                     converterData.MtoonMaterials[i].SetFloat("_OutlineColorMode", 1f);
 
