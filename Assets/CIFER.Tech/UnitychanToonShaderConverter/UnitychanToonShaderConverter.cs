@@ -111,32 +111,34 @@ namespace CIFER.Tech.UnitychanToonShaderConverter
 
                 #region Rim
 
-                //Rim
-                converterData.MtoonMaterials[i]
-                    .SetTexture("_RimTexture", converterData.UtsMaterials[i].GetTexture("_Set_RimLightMask"));
-
-                converterData.MtoonMaterials[i]
-                    .SetColor("_RimColor", converterData.UtsMaterials[i].GetColor("_RimLightColor"));
-
-                //Lighting Mix
-                //UniVRM最新版（v0.55）だと動いてない
-                //どのバージョンから動いてないんだろ…？
-                //https://github.com/Santarh/MToon/issues/84
-                if (converterData.UtsMaterials[i].GetFloat("_LightDirection_MaskOn") > 0)
+                if (converterData.UtsMaterials[i].GetFloat("_RimLight") > 0)
                 {
                     converterData.MtoonMaterials[i]
-                        .SetFloat("_RimLightingMix",
-                            converterData.UtsMaterials[i].GetFloat("_Tweak_LightDirection_MaskLevel") * 2);
+                        .SetTexture("_RimTexture", converterData.UtsMaterials[i].GetTexture("_Set_RimLightMask"));
+
+                    converterData.MtoonMaterials[i]
+                        .SetColor("_RimColor", converterData.UtsMaterials[i].GetColor("_RimLightColor"));
+
+                    //Lighting Mix
+                    //UniVRM最新版（v0.55）だと動いてない
+                    //どのバージョンから動いてないんだろ…？
+                    //https://github.com/Santarh/MToon/issues/84
+                    if (converterData.UtsMaterials[i].GetFloat("_LightDirection_MaskOn") > 0)
+                    {
+                        converterData.MtoonMaterials[i]
+                            .SetFloat("_RimLightingMix",
+                                converterData.UtsMaterials[i].GetFloat("_Tweak_LightDirection_MaskLevel") * 2);
+                    }
+
+                    converterData.MtoonMaterials[i]
+                        .SetFloat("_RimFresnelPower",
+                            converterData.UtsMaterials[i].GetFloat("_RimLight_FeatherOff") * 92 + 8);
+
+                    var rimLightPower = converterData.UtsMaterials[i].GetFloat("_RimLight_Power");
+                    var rimLightInsideMask = converterData.UtsMaterials[i].GetFloat("_RimLight_InsideMask");
+                    var rimLift = Mathf.Abs(Mathf.Log10(1 - rimLightInsideMask) * rimLightPower + 0.0001f);
+                    converterData.MtoonMaterials[i].SetFloat("_RimLift", rimLift);
                 }
-
-                converterData.MtoonMaterials[i]
-                    .SetFloat("_RimFresnelPower",
-                        converterData.UtsMaterials[i].GetFloat("_RimLight_FeatherOff") * 92 + 8);
-
-                var rimLightPower = converterData.UtsMaterials[i].GetFloat("_RimLight_Power");
-                var rimLightInsideMask = converterData.UtsMaterials[i].GetFloat("_RimLight_InsideMask");
-                var rimLift = Mathf.Abs(Mathf.Log10(1 - rimLightInsideMask) * rimLightPower + 0.0001f);
-                converterData.MtoonMaterials[i].SetFloat("_RimLift", rimLift);
 
                 #endregion
 
