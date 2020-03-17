@@ -142,18 +142,25 @@ namespace CIFER.Tech.UnitychanToonShaderConverter
 
                 #region Outline
 
-                converterData.MtoonMaterials[i].SetFloat("_OutlineWidthMode", 1f);
+                if (converterData.UtsMaterials[i].HasProperty("_OUTLINE"))
+                {
+                    converterData.MtoonMaterials[i].SetFloat("_OutlineWidthMode", 1f);
 
-                converterData.MtoonMaterials[i].SetTexture("_OutlineWidthTexture",
-                    converterData.UtsMaterials[i].GetTexture("_Outline_Sampler"));
+                    converterData.MtoonMaterials[i].SetTexture("_OutlineWidthTexture",
+                        converterData.UtsMaterials[i].GetTexture("_Outline_Sampler"));
 
-                converterData.MtoonMaterials[i].SetFloat("_OutlineWidth",
-                    Mathf.Abs(converterData.UtsMaterials[i].GetFloat("_Outline_Width")) / 10f);
+                    converterData.MtoonMaterials[i].SetFloat("_OutlineWidth",
+                        Mathf.Abs(converterData.UtsMaterials[i].GetFloat("_Outline_Width")) / 10f);
 
-                converterData.MtoonMaterials[i].SetFloat("_OutlineColorMode", 1f);
+                    converterData.MtoonMaterials[i].SetFloat("_OutlineColorMode", 1f);
 
-                converterData.MtoonMaterials[i].SetColor("_OutlineColor",
-                    converterData.UtsMaterials[i].GetColor("_Outline_Color"));
+                    converterData.MtoonMaterials[i].SetColor("_OutlineColor",
+                        converterData.UtsMaterials[i].GetColor("_Outline_Color"));
+                }
+                else
+                {
+                    converterData.MtoonMaterials[i].SetFloat("_OutlineWidthMode", 0f);
+                }
 
                 #endregion
             }
